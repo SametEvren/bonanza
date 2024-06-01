@@ -11,6 +11,8 @@ GameObject:
   - component: {fileID: 7564474677275509801}
   - component: {fileID: 925931366376227068}
   - component: {fileID: 4085818704014501317}
+  - component: {fileID: 2387796366474265734}
+  - component: {fileID: 6379761597177989644}
   m_Layer: 5
   m_Name: SlotItem
   m_TagString: Untagged
@@ -75,3 +77,28 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 0
   m_PixelsPerUnitMultiplier: 1
+--- !u!114 &2387796366474265734
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3924669480309271026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 81f81dd4ae7e430ab6933804c2ec2b03, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  slotSpriteLibrary: {fileID: 11400000, guid: b93b020b3807b61468c4665e3ffa228a, type: 2}
+--- !u!114 &6379761597177989644
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3924669480309271026}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 318f09f09ad74f64b5abdf093e38cbff, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
