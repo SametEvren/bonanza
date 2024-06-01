@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e7d732421a6c4665a43e5e6703a74e29, type: 3}
-  m_Name: Slot Sprite Library
+  m_Script: {fileID: 11500000, guid: 667abc4596fe4f48b5db5780ea186c77, type: 3}
+  m_Name: Spawn Chances
   m_EditorClassIdentifier: 
-  slotSpriteEntries: []
+  typeChances:
+    commonChance: 0
+    scatterChance: 0
+    multiplierChance: 0
+  skinChanceEntries: []
