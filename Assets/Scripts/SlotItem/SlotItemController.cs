@@ -5,6 +5,7 @@ namespace SlotItem
     [RequireComponent(typeof(SlotItemView))]
     public class SlotItemController : MonoBehaviour
     {
+        
         private SlotItemView _slotItemView;
         private SlotItemModel _slotItemModel;
 

@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using PrimeTween;
 using Reel;
 using SlotItem;
+using SymbolScriptables;
 using UnityEngine;
 using Utility;
 using Random = UnityEngine.Random;
@@ -11,8 +13,10 @@ public class SlotMachineController : MonoBehaviour
     [SerializeField] private SpawnChances spawnChances;
     [SerializeField] private List<ReelController> reelControllers;
     [SerializeField] private UnityEngine.Rendering.SerializedDictionary<SlotItemModel, int> _slotItemsDictionary = new();
+    [SerializeField] private PlayerDataController playerDataController;
+    [SerializeField] private SymbolLibrary symbolLibrary;
     private readonly List<int> _removedIndices = new();
-
+    
     private IObjectPoolManager<SlotItemController> ObjectPoolManager => 
         ServiceLocator.Get<IObjectPoolManager<SlotItemController>>();
 
@@ -55,8 +59,15 @@ public class SlotMachineController : MonoBehaviour
     {
         var slotType = spawnChances.EvaluateTypeValue(Random.Range(0f, 1f));
         var symbolIndex = spawnChances.EvaluateSymbolIndex(slotType, Random.Range(0f, 1f));
-        var slotModel = new SlotItemModel(slotType, symbolIndex);
+        var symbolData = GetRandomSymbolData(slotType);
+        var slotModel = new SlotItemModel(slotType, symbolData);
         return slotModel;
+    }
+
+    private SymbolData GetRandomSymbolData(SlotItemType slotType)
+    {
+        var rand = Random.Range(0f, 1f);
+        return symbolLibrary.GetTargetSymbol(slotType, rand);
     }
 
     public void SpawnSlotItems(int amount, Transform reelTransform)
@@ -112,6 +123,7 @@ public class SlotMachineController : MonoBehaviour
 
         bool anyRemoved = false;
 
+        ulong moneyToEarn = 0;
         foreach (var reelController in reelControllers)
         {
             List<int> indicesToRemove = new List<int>();
@@ -121,16 +133,23 @@ public class SlotMachineController : MonoBehaviour
                 var slotItemController = reelController.slotItemControllers[i];
                 if (itemsToRemove.Contains(slotItemController.Model))
                 {
+                    if (slotItemController.Model.slotItemType == SlotItemType.Common)
+                    {
+                        var commonSymbolData = (CommonSymbolData)slotItemController.Model.slotSymbolData;
+                        moneyToEarn += commonSymbolData.payoutValue;
+                    }
                     indicesToRemove.Add(i);
                 }
             }
 
+            //Money to earn
             if (indicesToRemove.Count > 0)
             {
                 DetermineAndRemoveSlotItems(reelController, indicesToRemove);
                 RefillSlotItems(reelController);
                 anyRemoved = true;
             }
+            
         }
 
         if (!anyRemoved)
@@ -139,6 +158,10 @@ public class SlotMachineController : MonoBehaviour
             {
                 ClearAndRespawnReel(reelController);
             }
+        }
+        else
+        {
+            playerDataController.ChangeGold(moneyToEarn);
         }
     }
 

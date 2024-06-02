@@ -1,16 +1,18 @@
 ﻿using System;
+using SymbolScriptables;
 
 namespace SlotItem
 {
     public struct SlotItemModel : IEquatable<SlotItemModel>
     {
         public SlotItemType slotItemType;
-        public int slotSymbolIndex;
+        public SymbolData slotSymbolData;
+        
 
-        public SlotItemModel(SlotItemType slotItemType, int slotSymbolIndex)
+        public SlotItemModel(SlotItemType slotItemType, SymbolData slotSymbolData)
         {
             this.slotItemType = slotItemType;
-            this.slotSymbolIndex = slotSymbolIndex;
+            this.slotSymbolData = slotSymbolData;
         }
 
         public override bool Equals(object obj)
@@ -20,14 +22,14 @@ namespace SlotItem
 
         public bool Equals(SlotItemModel other)
         {
-            return slotItemType == other.slotItemType && slotSymbolIndex == other.slotSymbolIndex;
+            return slotItemType == other.slotItemType && slotSymbolData == other.slotSymbolData;
         }
 
         public override int GetHashCode()
         {
             int hashCode = 17;
             hashCode = hashCode * 29 + slotItemType.GetHashCode();
-            hashCode = hashCode * 29 + slotSymbolIndex.GetHashCode();
+            hashCode = hashCode * 29 + slotSymbolData.GetHashCode();
             return hashCode;
         }
 

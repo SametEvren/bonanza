@@ -8,7 +8,6 @@ namespace SlotItem
     public class SlotItemView : MonoBehaviour
     {
         private Image _image;
-        [SerializeField] private SlotSpriteLibrary slotSpriteLibrary;
 
         private void Awake()
         {
@@ -18,12 +17,9 @@ namespace SlotItem
         public void Render(SlotItemModel slotItemModel)
         {
             gameObject.SetActive(true);
-            var sprite = slotSpriteLibrary.GetSprite(slotItemModel.slotItemType, slotItemModel.slotSymbolIndex);
             
-            if (sprite is null)
-                return;
             
-            _image.sprite = sprite;
+            _image.sprite = slotItemModel.slotSymbolData.sprite;
         }
     }
 }
