@@ -19,6 +19,38 @@ public class SpawnChances : ScriptableObject
 
         return null;
     }
+
+    public SlotItemType EvaluateTypeValue(float referencePoint)
+    {
+        if (referencePoint <= typeChances.commonChance)
+            return SlotItemType.Common;
+        
+        if (referencePoint - typeChances.commonChance <=  typeChances.scatterChance)
+            return SlotItemType.Scatter;
+
+        return SlotItemType.Multiplier;
+    }
+
+    public int EvaluateSkinIndex(SlotItemType slotItemType, float referencePoint)
+    {
+        var skinChances = GetSkinChances(slotItemType);
+        if (skinChances == null || skinChances.Value.chances.Count == 0)
+        {
+            return 0; //Return default skin index.
+        }
+
+        var cumulativeChance = 0f;
+        for (int i = 0; i < skinChances.Value.chances.Count; i++)
+        {
+            cumulativeChance += skinChances.Value.chances[i];
+            if (referencePoint <= cumulativeChance)
+            {
+                return i;
+            }
+        }
+
+        return 0; //Return default skin index.
+    }
 }
 
 [Serializable]

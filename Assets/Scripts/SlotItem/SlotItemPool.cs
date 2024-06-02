@@ -28,9 +28,16 @@ namespace SlotItem
             return new ObjectPool<SlotItemController>(() => Instantiate(prefab), ActionOnGet, OnPutBackInPool, defaultCapacity: capacity);
         }
 
-        private void ActionOnGet(SlotItemController obj) => obj.gameObject.SetActive(true);
+        private void ActionOnGet(SlotItemController obj)
+        {
+            obj.gameObject.SetActive(true);
+        }
 
-        private void OnPutBackInPool(SlotItemController obj) => obj.gameObject.SetActive(false);
+        private void OnPutBackInPool(SlotItemController obj)
+        {
+            obj.gameObject.SetActive(false);
+            obj.transform.SetParent(null);
+        }
 
         #endregion
 

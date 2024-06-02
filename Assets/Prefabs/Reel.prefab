@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 4838423663855186838}
   - component: {fileID: 2407746704194969810}
   - component: {fileID: 7588543558674114815}
+  - component: {fileID: 4542688078642825402}
   m_Layer: 5
   m_Name: Reel
   m_TagString: Untagged
@@ -94,6 +95,18 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_ShowMaskGraphic: 1
+--- !u!114 &4542688078642825402
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3016883065354459034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d7b79b03281563e45a0f9dd8304ab89d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &2561815498882587817
 PrefabInstance:
   m_ObjectHideFlags: 0

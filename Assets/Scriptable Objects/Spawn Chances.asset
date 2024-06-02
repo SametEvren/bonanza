@@ -13,7 +13,27 @@ MonoBehaviour:
   m_Name: Spawn Chances
   m_EditorClassIdentifier: 
   typeChances:
-    commonChance: 0
-    scatterChance: 0
-    multiplierChance: 0
-  skinChanceEntries: []
+    commonChance: 0.815
+    scatterChance: 0.109
+    multiplierChance: 0.077
+  skinChanceEntries:
+  - slotItemType: 0
+    skinChances:
+      chances:
+      - 0.112
+      - 0.111
+      - 0.111
+      - 0.111
+      - 0.111
+      - 0.111
+      - 0.111
+      - 0.111
+      - 0.111
+  - slotItemType: 1
+    skinChances:
+      chances:
+      - 1
+  - slotItemType: 2
+    skinChances:
+      chances:
+      - 1
