@@ -10,7 +10,7 @@ public class SlotMachineController : MonoBehaviour
 {
     [SerializeField] private SpawnChances spawnChances;
     [SerializeField] private List<ReelController> reelControllers;
-    [SerializeField] private SerializableDictionary<SlotItemModel, int> _slotItemsDictionary = new();
+    [SerializeField] private UnityEngine.Rendering.SerializedDictionary<SlotItemModel, int> _slotItemsDictionary = new();
     private readonly List<int> _removedIndices = new();
 
     private IObjectPoolManager<SlotItemController> ObjectPoolManager => 
