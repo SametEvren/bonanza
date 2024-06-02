@@ -9,7 +9,7 @@ namespace SlotItem
         private SlotItemModel _slotItemModel;
 
         public SlotItemType SlotItemType => _slotItemModel.slotItemType;
-
+        public SlotItemModel Model => _slotItemModel; 
         private void Awake()
         {
             _slotItemView = GetComponent<SlotItemView>();
