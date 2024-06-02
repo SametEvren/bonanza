@@ -5,12 +5,12 @@ namespace SlotItem
     public struct SlotItemModel : IEquatable<SlotItemModel>
     {
         public SlotItemType slotItemType;
-        public int slotSkinIndex;
+        public int slotSymbolIndex;
 
-        public SlotItemModel(SlotItemType slotItemType, int slotSkinIndex)
+        public SlotItemModel(SlotItemType slotItemType, int slotSymbolIndex)
         {
             this.slotItemType = slotItemType;
-            this.slotSkinIndex = slotSkinIndex;
+            this.slotSymbolIndex = slotSymbolIndex;
         }
 
         public override bool Equals(object obj)
@@ -20,14 +20,14 @@ namespace SlotItem
 
         public bool Equals(SlotItemModel other)
         {
-            return slotItemType == other.slotItemType && slotSkinIndex == other.slotSkinIndex;
+            return slotItemType == other.slotItemType && slotSymbolIndex == other.slotSymbolIndex;
         }
 
         public override int GetHashCode()
         {
             int hashCode = 17;
             hashCode = hashCode * 29 + slotItemType.GetHashCode();
-            hashCode = hashCode * 29 + slotSkinIndex.GetHashCode();
+            hashCode = hashCode * 29 + slotSymbolIndex.GetHashCode();
             return hashCode;
         }
 
@@ -65,12 +65,12 @@ namespace SlotItem
     public enum MultiplierSlotItemType
     {
         CrossSwords
-        // This is an enum for future expandability in case we need more skins.
+        // This is an enum for future expandability in case we need more symbols.
     }
 
     public enum ScatterSlotItemType
     {
         SkullInChest
-        // This is an enum for future expandability in case we need more skins.
+        // This is an enum for future expandability in case we need more symbols.
     }
 }

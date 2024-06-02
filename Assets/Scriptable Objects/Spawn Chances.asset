@@ -16,24 +16,24 @@ MonoBehaviour:
     commonChance: 0.79
     scatterChance: 0.118
     multiplierChance: 0.093
-  skinChanceEntries:
+  symbolChanceEntries:
   - slotItemType: 0
-    skinChances:
+    symbolChances:
       chances:
-      - 0.445
-      - 0
-      - 0
-      - 0
+      - 0.112
+      - 0.111
+      - 0.111
+      - 0.111
       - 0.111
       - 0.111
       - 0.111
       - 0.111
       - 0.111
   - slotItemType: 1
-    skinChances:
+    symbolChances:
       chances:
       - 1
   - slotItemType: 2
-    skinChances:
+    symbolChances:
       chances:
       - 1

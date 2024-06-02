@@ -7,14 +7,14 @@ using UnityEngine;
 public class SpawnChances : ScriptableObject
 {
     public TypeChances typeChances;
-    public List<SkinChanceEntry> skinChanceEntries;
+    public List<SymbolChanceEntry> symbolChanceEntries;
 
-    public SkinChances? GetSkinChances(SlotItemType slotItemType)
+    public SymbolChances? GetSymbolChances(SlotItemType slotItemType)
     {
-        foreach (var skinChanceEntry in skinChanceEntries)
+        foreach (var symbolChanceEntry in symbolChanceEntries)
         {
-            if (skinChanceEntry.slotItemType == slotItemType)
-                return skinChanceEntry.skinChances;
+            if (symbolChanceEntry.slotItemType == slotItemType)
+                return symbolChanceEntry.symbolChances;
         }
 
         return null;
@@ -31,25 +31,25 @@ public class SpawnChances : ScriptableObject
         return SlotItemType.Multiplier;
     }
 
-    public int EvaluateSkinIndex(SlotItemType slotItemType, float referencePoint)
+    public int EvaluateSymbolIndex(SlotItemType slotItemType, float referencePoint)
     {
-        var skinChances = GetSkinChances(slotItemType);
-        if (skinChances == null || skinChances.Value.chances.Count == 0)
+        var symbolChances = GetSymbolChances(slotItemType);
+        if (symbolChances == null || symbolChances.Value.chances.Count == 0)
         {
-            return 0; //Return default skin index.
+            return 0; //Return default symbol index.
         }
 
         var cumulativeChance = 0f;
-        for (int i = 0; i < skinChances.Value.chances.Count; i++)
+        for (int i = 0; i < symbolChances.Value.chances.Count; i++)
         {
-            cumulativeChance += skinChances.Value.chances[i];
+            cumulativeChance += symbolChances.Value.chances[i];
             if (referencePoint <= cumulativeChance)
             {
                 return i;
             }
         }
 
-        return 0; //Return default skin index.
+        return 0; //Return default symbol index.
     }
 }
 
@@ -62,14 +62,14 @@ public struct TypeChances
 }
 
 [Serializable]
-public struct SkinChances
+public struct SymbolChances
 {
     public List<float> chances;
 }
 
 [Serializable]
-public struct SkinChanceEntry
+public struct SymbolChanceEntry
 {
     public SlotItemType slotItemType;
-    public SkinChances skinChances;
+    public SymbolChances symbolChances;
 }

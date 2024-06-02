@@ -18,7 +18,7 @@ namespace SlotItem
         public void Render(SlotItemModel slotItemModel)
         {
             gameObject.SetActive(true);
-            var sprite = slotSpriteLibrary.GetSprite(slotItemModel.slotItemType, slotItemModel.slotSkinIndex);
+            var sprite = slotSpriteLibrary.GetSprite(slotItemModel.slotItemType, slotItemModel.slotSymbolIndex);
             
             if (sprite is null)
                 return;

@@ -54,8 +54,8 @@ public class SlotMachineController : MonoBehaviour
     private SlotItemModel GenerateSlotData()
     {
         var slotType = spawnChances.EvaluateTypeValue(Random.Range(0f, 1f));
-        var skinIndex = spawnChances.EvaluateSkinIndex(slotType, Random.Range(0f, 1f));
-        var slotModel = new SlotItemModel(slotType, skinIndex);
+        var symbolIndex = spawnChances.EvaluateSymbolIndex(slotType, Random.Range(0f, 1f));
+        var slotModel = new SlotItemModel(slotType, symbolIndex);
         return slotModel;
     }
 
