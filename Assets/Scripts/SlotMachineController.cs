@@ -10,7 +10,7 @@ public class SlotMachineController : MonoBehaviour
 {
     [SerializeField] private SpawnChances spawnChances;
     [SerializeField] private List<ReelController> reelControllers;
-    private readonly Dictionary<SlotItemModel, int> _slotItemsDictionary = new();
+    [SerializeField] private SerializableDictionary<SlotItemModel, int> _slotItemsDictionary = new();
     private readonly List<int> _removedIndices = new();
 
     private IObjectPoolManager<SlotItemController> ObjectPoolManager => 
@@ -18,15 +18,22 @@ public class SlotMachineController : MonoBehaviour
 
     private void Start()
     {
-        SpawnSlotItems(5, reelControllers[0].transform);
+        foreach (var reelController in reelControllers)
+        {
+            SpawnSlotItems(5, reelController.transform);
+        }
     }
 
     private void LogItemToDictionary(SlotItemModel slotItemModel)
     {
         if (_slotItemsDictionary.ContainsKey(slotItemModel))
+        {
             _slotItemsDictionary[slotItemModel]++;
+        }
         else
+        {
             _slotItemsDictionary.Add(slotItemModel, 1);
+        }
     }
 
     private void RemoveFromDictionary(SlotItemModel slotItemModel)
@@ -34,9 +41,13 @@ public class SlotMachineController : MonoBehaviour
         if (_slotItemsDictionary.ContainsKey(slotItemModel))
         {
             if (_slotItemsDictionary[slotItemModel] > 1)
+            {
                 _slotItemsDictionary[slotItemModel]--;
+            }
             else
+            {
                 _slotItemsDictionary.Remove(slotItemModel);
+            }
         }
     }
 
@@ -75,10 +86,73 @@ public class SlotMachineController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.S))
         {
-            List<int> indicesToRemove = new List<int> { 0, 2 };
-            DetermineAndRemoveSlotItems(reelControllers[0], indicesToRemove);
-            RefillSlotItems();
+            CheckAndRemoveItems();
         }
+
+        if (Input.GetKeyDown(KeyCode.A))
+        {
+            foreach (var reelController in reelControllers)
+            {
+                ClearAndRespawnReel(reelController);
+            }
+        }
+    }
+
+    private void CheckAndRemoveItems()
+    {
+        List<SlotItemModel> itemsToRemove = new List<SlotItemModel>();
+
+        foreach (var entry in _slotItemsDictionary)
+        {
+            if (entry.Value >= 8)
+            {
+                itemsToRemove.Add(entry.Key);
+            }
+        }
+
+        bool anyRemoved = false;
+
+        foreach (var reelController in reelControllers)
+        {
+            List<int> indicesToRemove = new List<int>();
+
+            for (int i = 0; i < reelController.slotItemControllers.Count; i++)
+            {
+                var slotItemController = reelController.slotItemControllers[i];
+                if (itemsToRemove.Contains(slotItemController.Model))
+                {
+                    indicesToRemove.Add(i);
+                }
+            }
+
+            if (indicesToRemove.Count > 0)
+            {
+                DetermineAndRemoveSlotItems(reelController, indicesToRemove);
+                RefillSlotItems(reelController);
+                anyRemoved = true;
+            }
+        }
+
+        if (!anyRemoved)
+        {
+            foreach (var reelController in reelControllers)
+            {
+                ClearAndRespawnReel(reelController);
+            }
+        }
+    }
+
+    private void ClearAndRespawnReel(ReelController reelController)
+    {
+        foreach (var slotItem in reelController.slotItemControllers)
+        {
+            RemoveFromDictionary(slotItem.GetComponent<SlotItemController>().Model);
+            ObjectPoolManager.ReleaseItemToPool(slotItem);
+        }
+
+        reelController.slotItemControllers.Clear();
+
+        SpawnSlotItems(5, reelController.transform);
     }
 
     private void DetermineAndRemoveSlotItems(ReelController reelController, List<int> indicesToRemove)
@@ -88,8 +162,15 @@ public class SlotMachineController : MonoBehaviour
         _removedIndices.Clear();
         _removedIndices.AddRange(indicesToRemove);
 
-        foreach (var index in indicesToRemove)
+        for (int i = _removedIndices.Count - 1; i >= 0; i--)
         {
+            int index = _removedIndices[i];
+            if (index < 0 || index >= reelController.slotItemControllers.Count)
+            {
+                _removedIndices.RemoveAt(i);
+                continue;
+            }
+
             var slotItem = reelController.slotItemControllers[index];
             RemoveFromDictionary(slotItem.GetComponent<SlotItemController>().Model);
             ObjectPoolManager.ReleaseItemToPool(slotItem);
@@ -106,9 +187,8 @@ public class SlotMachineController : MonoBehaviour
         }
     }
 
-    private void RefillSlotItems()
+    private void RefillSlotItems(ReelController reelController)
     {
-        var reelController = reelControllers[0];
         var bottom = new Vector2(0, 5);
 
         foreach (var index in _removedIndices)
@@ -133,14 +213,5 @@ public class SlotMachineController : MonoBehaviour
         }
 
         _removedIndices.Clear();
-        PrintDictionaryContents();
-    }
-
-    private void PrintDictionaryContents()
-    {
-        foreach (var kvp in _slotItemsDictionary)
-        {
-            Debug.Log($"Key: {kvp.Key.slotItemType}, {kvp.Key.slotSkinIndex}, Value: {kvp.Value}");
-        }
     }
 }
