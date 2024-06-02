@@ -198,7 +198,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ba4b6535a867426ebced39b2c7281e68, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  betAmount: 10000000
+  betController: {fileID: 1743744986}
   _playerDataController: {fileID: 718640375}
   _slotItemsDictionary:
     m_Keys: 
@@ -690,6 +690,52 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: a72d71c6fdfd4d64284e104a94d605ed, type: 2}
+--- !u!1 &806790354
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 806790356}
+  - component: {fileID: 806790355}
+  m_Layer: 0
+  m_Name: SymbolSpawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &806790355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806790354}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 46411d463c164ec6b17ae04553a41242, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spawnChances: {fileID: 11400000, guid: b7b10fe2df9208a42b086c0cfb3a7852, type: 2}
+  symbolLibrary: {fileID: 11400000, guid: fc7cf4e093069fc4bb7c8724a4b37a0f, type: 2}
+--- !u!4 &806790356
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 806790354}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -787,6 +833,51 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d7b79b03281563e45a0f9dd8304ab89d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1 &1743744985
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1743744987}
+  - component: {fileID: 1743744986}
+  m_Layer: 0
+  m_Name: BetController
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1743744986
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743744985}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f2967a3169aa41669a9ea4acc5373e21, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerData: {fileID: 11400000, guid: a72d71c6fdfd4d64284e104a94d605ed, type: 2}
+--- !u!4 &1743744987
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1743744985}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1799114915
 GameObject:
   m_ObjectHideFlags: 0
@@ -977,7 +1068,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9ba43b6cb2aa4d43840d1631fe34b58f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  spawnChances: {fileID: 11400000, guid: b7b10fe2df9208a42b086c0cfb3a7852, type: 2}
+  symbolLibrary: {fileID: 11400000, guid: fc7cf4e093069fc4bb7c8724a4b37a0f, type: 2}
   reelControllers:
   - {fileID: 599948595}
   - {fileID: 1719983251}
@@ -986,7 +1077,7 @@ MonoBehaviour:
   - {fileID: 952496937}
   - {fileID: 1943507041}
   winningsCalculator: {fileID: 169680582}
-  symbolLibrary: {fileID: 11400000, guid: fc7cf4e093069fc4bb7c8724a4b37a0f, type: 2}
+  betController: {fileID: 1743744986}
 --- !u!4 &2043274266
 Transform:
   m_ObjectHideFlags: 0
@@ -1199,3 +1290,5 @@ SceneRoots:
   - {fileID: 116719625}
   - {fileID: 718640374}
   - {fileID: 169680583}
+  - {fileID: 1743744987}
+  - {fileID: 806790356}

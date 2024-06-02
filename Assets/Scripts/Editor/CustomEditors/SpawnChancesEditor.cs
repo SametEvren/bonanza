@@ -19,7 +19,6 @@ namespace Editor.CustomEditors
 
         public override void OnInspectorGUI()
         {
-            base.OnInspectorGUI();
             RenderTypeChanceSliders();
         }
 

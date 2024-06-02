@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using SlotItem;
 using SymbolScriptables;
 using UnityEngine;
@@ -13,6 +14,11 @@ public class SymbolLibrary : ScriptableObject
     private float _scatterSymbolWeightTotal = -1;
     private float _multiplierSymbolWeightTotal = -1;
 
+    public List<CommonSymbolData> PickCommonData(List<SymbolType> symbolTypes)
+    {
+        return commonSymbolData.Where(commonSymbol => symbolTypes.Contains(commonSymbol.symbolType)).ToList();
+    }
+    
     private void CalculateTotalWeights()
     {
         if (_commonSymbolWeightTotal < 0)

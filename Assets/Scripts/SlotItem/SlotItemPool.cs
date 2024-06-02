@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections;
+using UnityEngine;
 using UnityEngine.Pool;
 using Utility;
 
@@ -10,7 +11,7 @@ namespace SlotItem
         [SerializeField] private SlotItemController slotItemPrefab;
         private const int SlotItemCapacity = 2000;
 
-        private void Start()
+        private void Awake()
         {
             SetPool();
             ServiceLocator.Add<IObjectPoolManager<SlotItemController>>(this);
@@ -44,12 +45,20 @@ namespace SlotItem
         public SlotItemController GetItemFromPool()
         {
             var slotItem = _slotItemPool.Get();
+            slotItem.ResetSlotItem();
             return slotItem;    
         }
 
         public void ReleaseItemToPool(SlotItemController item)
         {
-            _slotItemPool.Release(item);
+            OnPutBackInPool(item);
+            StartCoroutine(ReleaseAfterTime(1.1f));
+            IEnumerator ReleaseAfterTime(float time)
+            {
+                yield return new WaitForSeconds(time);
+                _slotItemPool.Release(item);
+            }
         }
+        
     }
 }
