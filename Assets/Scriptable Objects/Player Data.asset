@@ -12,6 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3906058da8594fd28a41f9cea2dd1d34, type: 3}
   m_Name: Player Data
   m_EditorClassIdentifier: 
-  gold: 1000000
+  gold: 104757814
   experience: 0
   level: 0

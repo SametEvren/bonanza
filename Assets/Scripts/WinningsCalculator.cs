@@ -59,17 +59,20 @@ public class WinningsCalculator : MonoBehaviour
         return betAmount / (double)BaseBetAmount;
     }
 
-    public void EarnWinnings(List<CommonSymbolData> data)
+    public void EarnWinnings(List<(CommonSymbolData symbolData, int amount)> dataTuples)
     {
         ulong earnings = 0;
         
-        foreach (var symbolData in data)
+        foreach (var tuple in dataTuples)
         {
-            earnings += symbolData.payoutValue;
+            var amount = (ulong)tuple.amount;
+            var payout = tuple.symbolData.payoutValue;
+            earnings += amount * payout;
         }
 
         earnings = (ulong)(earnings * GetBetMultiplier(betController.CurrentBetAmount));
         
+        Debug.Log(earnings);
         _playerDataController.ChangeGold(earnings);
     }
 

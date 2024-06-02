@@ -13,27 +13,6 @@ MonoBehaviour:
   m_Name: Spawn Chances
   m_EditorClassIdentifier: 
   typeChances:
-    commonChance: 0.79
-    scatterChance: 0.118
-    multiplierChance: 0.093
-  symbolChanceEntries:
-  - slotItemType: 0
-    symbolChances:
-      chances:
-      - 0.556
-      - 0
-      - 0
-      - 0
-      - 0
-      - 0.111
-      - 0.111
-      - 0.111
-      - 0.111
-  - slotItemType: 1
-    symbolChances:
-      chances:
-      - 1
-  - slotItemType: 2
-    symbolChances:
-      chances:
-      - 1
+    commonChance: 0.909
+    scatterChance: 0.066
+    multiplierChance: 0.026

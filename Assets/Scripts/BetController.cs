@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 public class BetController : MonoBehaviour
 {
@@ -7,6 +8,11 @@ public class BetController : MonoBehaviour
     {
         get;
         private set;
+    }
+
+    private void Start()
+    {
+        SetBetAmount(1_000_000);
     }
 
     public void SetBetAmount(ulong betAmount)

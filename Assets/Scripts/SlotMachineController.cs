@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Reel;
 using SlotItem;
+using SymbolScriptables;
 using UnityEngine;
 using Utility;
 
@@ -94,8 +95,16 @@ public class SlotMachineController : MonoBehaviour
                 reelController.MoveItemsDown(amountToSpawn, HandleSpinComplete);
             }
         }
+
+        var commonSymbols = symbolLibrary.PickCommonData(symbolsToRemove);
+        var tuples = new List<(CommonSymbolData symbolData, int amount)>();
+
+        foreach (var commonSymbol in commonSymbols)
+        {
+            tuples.Add((commonSymbol,matches[commonSymbol.symbolType]));
+        }
         
-        winningsCalculator.EarnWinnings(symbolLibrary.PickCommonData(symbolsToRemove));
+        winningsCalculator.EarnWinnings(tuples);
     }
 
 

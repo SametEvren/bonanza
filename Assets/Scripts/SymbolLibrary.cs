@@ -16,7 +16,21 @@ public class SymbolLibrary : ScriptableObject
 
     public List<CommonSymbolData> PickCommonData(List<SymbolType> symbolTypes)
     {
-        return commonSymbolData.Where(commonSymbol => symbolTypes.Contains(commonSymbol.symbolType)).ToList();
+        List<CommonSymbolData> selectedData = new List<CommonSymbolData>();
+
+        foreach (var symbolType in symbolTypes)
+        {
+            foreach (var symbolData in commonSymbolData)
+            {
+                if (symbolData.symbolType == symbolType)
+                {
+                    selectedData.Add(symbolData);
+                    break;
+                } 
+            }
+        }
+
+        return selectedData;
     }
     
     private void CalculateTotalWeights()
