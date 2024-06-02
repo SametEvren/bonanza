@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6f47025f124bceb5a44277dd9249aa, type: 3}
   m_Name: 4 - Map
   m_EditorClassIdentifier: 
+  symbolType: 4
   sprite: {fileID: 21300000, guid: c3aeb5ccb1994164a816663337a46093, type: 3}
   spawnWeight: 7
   payoutValue: 2000000

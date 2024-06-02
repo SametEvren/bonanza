@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6f47025f124bceb5a44277dd9249aa, type: 3}
   m_Name: 1 - Compass
   m_EditorClassIdentifier: 
+  symbolType: 1
   sprite: {fileID: 21300000, guid: 32d780ae10c0ce94794e48000f8ec5b5, type: 3}
   spawnWeight: 9
   payoutValue: 1250000

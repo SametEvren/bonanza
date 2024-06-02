@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using PrimeTween;
 using Reel;
 using SlotItem;
@@ -12,9 +11,9 @@ public class SlotMachineController : MonoBehaviour
 {
     [SerializeField] private SpawnChances spawnChances;
     [SerializeField] private List<ReelController> reelControllers;
-    [SerializeField] private UnityEngine.Rendering.SerializedDictionary<SlotItemModel, int> _slotItemsDictionary = new();
-    [SerializeField] private PlayerDataController playerDataController;
+    [SerializeField] private WinningsCalculator winningsCalculator;
     [SerializeField] private SymbolLibrary symbolLibrary;
+
     private readonly List<int> _removedIndices = new();
     
     private IObjectPoolManager<SlotItemController> ObjectPoolManager => 
@@ -28,32 +27,7 @@ public class SlotMachineController : MonoBehaviour
         }
     }
 
-    private void LogItemToDictionary(SlotItemModel slotItemModel)
-    {
-        if (_slotItemsDictionary.ContainsKey(slotItemModel))
-        {
-            _slotItemsDictionary[slotItemModel]++;
-        }
-        else
-        {
-            _slotItemsDictionary.Add(slotItemModel, 1);
-        }
-    }
-
-    private void RemoveFromDictionary(SlotItemModel slotItemModel)
-    {
-        if (_slotItemsDictionary.ContainsKey(slotItemModel))
-        {
-            if (_slotItemsDictionary[slotItemModel] > 1)
-            {
-                _slotItemsDictionary[slotItemModel]--;
-            }
-            else
-            {
-                _slotItemsDictionary.Remove(slotItemModel);
-            }
-        }
-    }
+    
 
     private SlotItemModel GenerateSlotData()
     {
@@ -86,8 +60,8 @@ public class SlotMachineController : MonoBehaviour
                 bottom + Vector2.up * (unitHeight * (5 + i));
             reelController.slotItemControllers.Add(spawnedItem);
             var model = GenerateSlotData();
-            LogItemToDictionary(model);
             spawnedItem.SetModel(model); // Rendering stuff
+            winningsCalculator.AddToItemCount(spawnedItem.SymbolData.symbolType);
 
             Tween.UIAnchoredPosition(rectTransform, bottom + new Vector2(0, i * unitHeight), 1f);
         }
@@ -111,19 +85,11 @@ public class SlotMachineController : MonoBehaviour
 
     private void CheckAndRemoveItems()
     {
-        List<SlotItemModel> itemsToRemove = new List<SlotItemModel>();
-
-        foreach (var entry in _slotItemsDictionary)
-        {
-            if (entry.Value >= 8)
-            {
-                itemsToRemove.Add(entry.Key);
-            }
-        }
+        var itemsToRemove = winningsCalculator.GetMatches();
 
         bool anyRemoved = false;
+        List<CommonSymbolData> matchedCommonData = new List<CommonSymbolData>();
 
-        ulong moneyToEarn = 0;
         foreach (var reelController in reelControllers)
         {
             List<int> indicesToRemove = new List<int>();
@@ -131,18 +97,18 @@ public class SlotMachineController : MonoBehaviour
             for (int i = 0; i < reelController.slotItemControllers.Count; i++)
             {
                 var slotItemController = reelController.slotItemControllers[i];
-                if (itemsToRemove.Contains(slotItemController.Model))
+                if (itemsToRemove.ContainsKey(slotItemController.SymbolData.symbolType))
                 {
                     if (slotItemController.Model.slotItemType == SlotItemType.Common)
                     {
-                        var commonSymbolData = (CommonSymbolData)slotItemController.Model.slotSymbolData;
-                        moneyToEarn += commonSymbolData.payoutValue;
+                        var commonSymbolData = (CommonSymbolData)slotItemController.SymbolData;
+                        matchedCommonData.Add(commonSymbolData);
                     }
+                    
                     indicesToRemove.Add(i);
                 }
             }
-
-            //Money to earn
+            
             if (indicesToRemove.Count > 0)
             {
                 DetermineAndRemoveSlotItems(reelController, indicesToRemove);
@@ -161,7 +127,7 @@ public class SlotMachineController : MonoBehaviour
         }
         else
         {
-            playerDataController.ChangeGold(moneyToEarn);
+            winningsCalculator.EarnWinnings(matchedCommonData);
         }
     }
 
@@ -169,7 +135,7 @@ public class SlotMachineController : MonoBehaviour
     {
         foreach (var slotItem in reelController.slotItemControllers)
         {
-            RemoveFromDictionary(slotItem.GetComponent<SlotItemController>().Model);
+            winningsCalculator.RemoveFromItemCount(slotItem.SymbolData.symbolType);
             ObjectPoolManager.ReleaseItemToPool(slotItem);
         }
 
@@ -195,7 +161,7 @@ public class SlotMachineController : MonoBehaviour
             }
 
             var slotItem = reelController.slotItemControllers[index];
-            RemoveFromDictionary(slotItem.GetComponent<SlotItemController>().Model);
+            winningsCalculator.RemoveFromItemCount(slotItem.SymbolData.symbolType);
             ObjectPoolManager.ReleaseItemToPool(slotItem);
             reelController.slotItemControllers.RemoveAt(index);
         }
@@ -229,8 +195,8 @@ public class SlotMachineController : MonoBehaviour
             reelController.slotItemControllers.Add(spawnedItem);
 
             var model = GenerateSlotData();
-            LogItemToDictionary(model);
             spawnedItem.SetModel(model); // Rendering stuff
+            winningsCalculator.AddToItemCount(spawnedItem.SymbolData.symbolType);
 
             Tween.UIAnchoredPosition(rectTransform, currentTopPosition, 1f);
         }

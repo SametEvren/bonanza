@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using SymbolScriptables;
+using UnityEngine;
 
 namespace SlotItem
 {
@@ -10,7 +11,10 @@ namespace SlotItem
         private SlotItemModel _slotItemModel;
 
         public SlotItemType SlotItemType => _slotItemModel.slotItemType;
-        public SlotItemModel Model => _slotItemModel; 
+        public SlotItemModel Model => _slotItemModel;
+        
+        public SymbolData SymbolData => Model.slotSymbolData;
+        
         private void Awake()
         {
             _slotItemView = GetComponent<SlotItemView>();

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6f47025f124bceb5a44277dd9249aa, type: 3}
   m_Name: 6 - Rum
   m_EditorClassIdentifier: 
+  symbolType: 6
   sprite: {fileID: 21300000, guid: 24442cbcffff1b74e8d9b1c035d35a85, type: 3}
   spawnWeight: 7
   payoutValue: 2250000
