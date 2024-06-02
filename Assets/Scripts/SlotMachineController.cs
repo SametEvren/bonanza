@@ -11,6 +11,7 @@ public class SlotMachineController : MonoBehaviour
     [SerializeField] private SpawnChances spawnChances;
     [SerializeField] private List<ReelController> reelControllers;
     private readonly Dictionary<SlotItemModel, int> _slotItemsDictionary = new ();
+    private readonly List<int> _removedIndices = new();
 
     private IObjectPoolManager<SlotItemController> ObjectPoolManager => 
         ServiceLocator.Get<IObjectPoolManager<SlotItemController>>();
@@ -25,7 +26,7 @@ public class SlotMachineController : MonoBehaviour
         if (_slotItemsDictionary.ContainsKey(slotItemModel))
             _slotItemsDictionary[slotItemModel]++;
         else
-            _slotItemsDictionary.Add(slotItemModel,1);
+            _slotItemsDictionary.Add(slotItemModel, 1);
     }
     
     private SlotItemModel GenerateSlotData()
@@ -53,7 +54,7 @@ public class SlotMachineController : MonoBehaviour
             reelController.slotItemControllers.Add(spawnedItem);
             var model = GenerateSlotData();
             LogItemToDictionary(model);
-            spawnedItem.SetModel(model); //Rendering Stuff
+            spawnedItem.SetModel(model); // Rendering stuff
 
             Tween.UIAnchoredPosition(rectTransform, bottom + new Vector2(0, i * unitHeight), 1f);
         }
@@ -63,8 +64,62 @@ public class SlotMachineController : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.S))
         {
-            ObjectPoolManager.ReleaseItemToPool(reelControllers[0].slotItemControllers[2]);
-            ObjectPoolManager.ReleaseItemToPool(reelControllers[0].slotItemControllers[4]);
+            List<int> indicesToRemove = new List<int> { 0, 2 };
+            DetermineAndRemoveSlotItems(reelControllers[0], indicesToRemove);
+            RefillSlotItems();
         }
+    }
+
+    private void DetermineAndRemoveSlotItems(ReelController reelController, List<int> indicesToRemove)
+    {
+        indicesToRemove.Sort();
+
+        _removedIndices.Clear();
+        _removedIndices.AddRange(indicesToRemove);
+
+        foreach (var index in indicesToRemove)
+        {
+            var slotItem = reelController.slotItemControllers[index];
+            ObjectPoolManager.ReleaseItemToPool(slotItem);
+            reelController.slotItemControllers.RemoveAt(index);
+        }
+
+        var bottom = new Vector2(0, 5);
+        for (int i = 0; i < reelController.slotItemControllers.Count; i++)
+        {
+            var rectTransform = reelController.slotItemControllers[i].GetComponent<RectTransform>();
+            var unitHeight = rectTransform.sizeDelta.y;
+            var newPosition = new Vector2(rectTransform.anchoredPosition.x, bottom.y + (unitHeight * i));
+            Tween.UIAnchoredPosition(rectTransform, newPosition, 1f);
+        }
+    }
+
+    private void RefillSlotItems()
+    {
+        var reelController = reelControllers[0];
+        var bottom = new Vector2(0, 5);
+
+        foreach (var index in _removedIndices)
+        {
+            var spawnedItem = ObjectPoolManager.GetItemFromPool();
+            var rectTransform = spawnedItem.GetComponent<RectTransform>();
+            var unitHeight = rectTransform.sizeDelta.y;
+
+            var currentTopPosition = bottom + Vector2.up * (reelController.slotItemControllers.Count * unitHeight);
+            var nearestSpawnPosition = bottom + Vector2.up * (6 * unitHeight);
+            var spawnPosition = nearestSpawnPosition + Vector2.up * (unitHeight * index);
+
+            spawnedItem.transform.SetParent(reelController.transform);
+            rectTransform.anchoredPosition = spawnPosition;
+            reelController.slotItemControllers.Add(spawnedItem);
+            
+            var model = GenerateSlotData();
+            LogItemToDictionary(model);
+            spawnedItem.SetModel(model); // Rendering stuff
+
+            Tween.UIAnchoredPosition(rectTransform, currentTopPosition, 1f);
+        }
+
+        _removedIndices.Clear();
     }
 }
