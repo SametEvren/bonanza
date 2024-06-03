@@ -42,14 +42,6 @@ namespace GameplayControllers
             StartCoroutine(SpinTheSlot());
         }
 
-        private void Update()
-        {
-            if (Input.GetKeyDown(KeyCode.S))
-            {
-                TrySpinningTheSlot();
-            }
-        }
-
         public void TrySpinningTheSlot()
         {
             if (freeSpinController.TrySpinningForFree())
