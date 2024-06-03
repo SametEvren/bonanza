@@ -14,4 +14,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: a72d71c6fdfd4d64284e104a94d605ed, type: 2}
   gold: 0
-  multiplier: 1
+  multiplier: 0
