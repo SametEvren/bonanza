@@ -18,8 +18,8 @@ public class SymbolSpawner : MonoBehaviour
     [SerializeField] private SpawnChances spawnChances;
     [SerializeField] private SymbolLibrary symbolLibrary;
     [SerializeField] private FreeSpinController freeSpinController;
-
     public MultiplierSymbolData multiplierSymbolData;
+    
     private void Awake()
     {
         ServiceLocator.Add(this);
@@ -27,7 +27,7 @@ public class SymbolSpawner : MonoBehaviour
 
     public List<SlotItemController> SpawnOnTop(ReelController reelController, int amount)
     {
-        var bottom = new Vector2(0, 5);
+        var bottomPosition = new Vector2(0, 5);
         var spawnedItems = new List<SlotItemController>();
         
         for (int i = 0; i < amount; i++)
@@ -37,11 +37,11 @@ public class SymbolSpawner : MonoBehaviour
 
             var unitHeight = rectTransform.sizeDelta.y;
             spawnedItem.transform.SetParent(reelController.transform);
-            rectTransform.anchoredPosition =
-                bottom + Vector2.up * (unitHeight * (5 + i));
+            rectTransform.anchoredPosition = bottomPosition + Vector2.up * (unitHeight * (5 + i));
             reelController.slotItemControllers.Add(spawnedItem);
+            
             var model = GenerateSymbolData();
-            spawnedItem.SetModel(model); // Rendering stuff
+            spawnedItem.SetModel(model);
             spawnedItems.Add(spawnedItem);
             onSpawnedItem?.Invoke(spawnedItem.SymbolType);
         }
@@ -59,13 +59,13 @@ public class SymbolSpawner : MonoBehaviour
     {
         var slotType = spawnChances.EvaluateTypeValue(Random.Range(0f, 1f));
         
-        if (slotType == SlotItemType.Multiplier)
+        if (slotType == SlotItemType.Multiplier && !freeSpinController.IsFreeSpinActive)
         {
-            slotType = freeSpinController.IsFreeSpinActive ? SlotItemType.Multiplier : SlotItemType.Common;
+            slotType = SlotItemType.Common;
         }
         
         var symbolData = GetRandomSymbolData(slotType);
-        var slotModel = new SlotItemModel(slotType, symbolData,1);
+        var slotModel = new SlotItemModel(slotType, symbolData, 1);
         return slotModel;
     }
 }

@@ -1,7 +1,6 @@
 ﻿using GameplayControllers;
 using TMPro;
 using UnityEngine;
-using UnityEngine.UI;
 
 public class UIChanger : MonoBehaviour
 {
@@ -15,19 +14,28 @@ public class UIChanger : MonoBehaviour
     [SerializeField] private TextMeshProUGUI betAmountText;
     [SerializeField] private TextMeshProUGUI autoSpinButtonText;
     [SerializeField] private GameObject spinButton;
-    
-    
+
     private void Start()
     {
         UpdateGoldText(playerData.Gold);
         UpdateFreeSpinText(playerData.FreeSpinAmount);
-        UpdateNonCollectedGoldText(temporaryGoldPool.gold);
+        UpdateNonCollectedGoldText(temporaryGoldPool.Gold);
         UpdateBetAmountText(betController.CurrentBetAmount);
+
         playerData.onGoldChange += UpdateGoldText;
         playerData.onFreeSpinChange += UpdateFreeSpinText;
         temporaryGoldPool.onTemporaryGoldChange += UpdateNonCollectedGoldText;
         betController.onBetChange += UpdateBetAmountText;
         slotMachineController.AutoSpinChanged += ChangeSpinButtons;
+    }
+
+    private void OnDestroy()
+    {
+        playerData.onGoldChange -= UpdateGoldText;
+        playerData.onFreeSpinChange -= UpdateFreeSpinText;
+        temporaryGoldPool.onTemporaryGoldChange -= UpdateNonCollectedGoldText;
+        betController.onBetChange -= UpdateBetAmountText;
+        slotMachineController.AutoSpinChanged -= ChangeSpinButtons;
     }
 
     private void UpdateBetAmountText(ulong betAmount)
@@ -49,7 +57,7 @@ public class UIChanger : MonoBehaviour
     {
         nonCollectedGoldText.text = newGold.ToString();
     }
-    
+
     private void ChangeSpinButtons(bool isAutoSpinEnabled)
     {
         if (isAutoSpinEnabled)

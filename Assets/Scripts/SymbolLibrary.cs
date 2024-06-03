@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using SlotItem;
 using SymbolScriptables;
 using UnityEngine;
@@ -142,6 +141,6 @@ public class SymbolLibrary : ScriptableObject
             return symbolDataList[0];
         }
 
-        return null; // Default case, should not be reached
+        return null;
     }
 }
