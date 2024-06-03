@@ -83,6 +83,7 @@ namespace GameplayControllers
 
         public Dictionary<SymbolType, int> GetMatches()
         {
+            Debug.Log("Getting Matches");
             var itemsToRemove = new Dictionary<SymbolType, int>();
         
             foreach (var entry in _slotItemsDictionary)
@@ -92,6 +93,7 @@ namespace GameplayControllers
                     itemsToRemove.Add(entry.Key,entry.Value);
                 }
             }
+            Debug.Log("Got Matches");
             return itemsToRemove;
         }
     }

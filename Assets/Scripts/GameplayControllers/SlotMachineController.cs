@@ -39,7 +39,8 @@ namespace GameplayControllers
         private bool isSpinCompleteHandling = false;
         public bool isSpinning = false;
         private bool isAutoSpinEnabled;
-
+        public int spinningReels;
+        
         public Action<bool> AutoSpinChanged;
         private void Start()
         {
@@ -68,6 +69,7 @@ namespace GameplayControllers
 
         private IEnumerator SpinTheSlot()
         {
+            Debug.Log("Initiating Spin");
             foreach (var reelController in reelControllers)
             {
                 SpinReelAround(reelController);
@@ -126,13 +128,18 @@ namespace GameplayControllers
 
             foreach (var reelController in reelControllers)
             {
+                spinningReels++;
                 var amountToSpawn = reelController.RemoveSymbolsOfType(symbolsToRemove);
                 if (amountToSpawn > 0)
                 {
                     isSpinning = true;
                     startSpinningWithinHandling = true;
                     SymbolSpawner.SpawnOnTop(reelController, amountToSpawn);
-                    reelController.MoveItemsDown(amountToSpawn, HandleSpinComplete);
+                    reelController.MoveItemsDown(amountToSpawn, HandleReelSpinComplete);
+                }
+                else
+                {
+                    spinningReels--;
                 }
             }
 
@@ -182,6 +189,15 @@ namespace GameplayControllers
             }
         }
 
+        private void HandleReelSpinComplete()
+        {
+            spinningReels--;
+            if (spinningReels == 0)
+            {
+                HandleSpinComplete();
+            }
+        }
+
         private IEnumerator ApplyWithinDelay()
         {
             yield return new WaitForSeconds(1f);
@@ -197,12 +213,17 @@ namespace GameplayControllers
             yield return new WaitForSeconds(0.75f);
             foreach (var reelController in reelControllers)
             {
+                spinningReels++;
                 var amountToSpawn = reelController.RemoveSymbolsOfType(symbolsToRemove);
                 if (amountToSpawn > 0)
                 {
                     isSpinning = true;
                     SymbolSpawner.SpawnOnTop(reelController, amountToSpawn);
-                    reelController.MoveItemsDown(amountToSpawn, HandleSpinComplete);
+                    reelController.MoveItemsDown(amountToSpawn, HandleReelSpinComplete);
+                }
+                else
+                {
+                    spinningReels--;
                 }
             }
             isSpinCompleteHandling = false;

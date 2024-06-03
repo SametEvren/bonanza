@@ -52,6 +52,7 @@ namespace Reel
 
         public int RemoveSymbolsOfType(List<SymbolType> symbolsToRemove)
         {
+            Debug.Log("Removing Symbols");
             var removeAmount = 0;
             var itemsToRemove = new List<SlotItemController>();
 
@@ -63,14 +64,15 @@ namespace Reel
                     itemsToRemove.Add(slotItemController);
                 }
             }
-
             
             foreach (var item in itemsToRemove)
             {
                 RemoveSlotItem(item);
             }
+            Debug.Log("Removed Symbols");
 
             return removeAmount;
+            
         }
 
         public void RemoveSlotItem(SlotItemController slotItemController)
