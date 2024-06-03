@@ -138,7 +138,7 @@ namespace GameplayControllers
 
             var finalMultiplier = 0f;
 
-            if (!containsNonMultiplierItems)
+            if (!containsNonMultiplierItems && !startSpinningWithinHandling)
             {
                 multiplierSymbols.AddRange(AllItemControllers.Where(s => s.SymbolType == SymbolType.Multiplier));
                 foreach (var multiplierSymbol in multiplierSymbols)
