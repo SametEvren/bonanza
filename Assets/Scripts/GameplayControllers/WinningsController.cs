@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SlotItem;
 using SymbolScriptables;
 using UnityEngine;
@@ -59,7 +60,7 @@ namespace GameplayControllers
         public void EarnWinnings(List<(CommonSymbolData symbolData, int amount)> dataTuples, float multiplier)
         {
             double earningMultiplier = 0;
-        
+
             foreach (var tuple in dataTuples)
             {
                 var amount = (ulong)tuple.amount;
@@ -67,15 +68,15 @@ namespace GameplayControllers
                 earningMultiplier += (amount * payout);
             }
 
-            var earnings = (ulong)(earningMultiplier * betController.CurrentBetAmount);
+            var earnings = (ulong)Math.Round(earningMultiplier * betController.CurrentBetAmount);
             temporaryGoldPool.Gold += earnings;
 
             if (multiplier > 1)
             {
                 temporaryGoldPool.multiplier += multiplier;
             }
-            
         }
+
 
         public Dictionary<SymbolType, int> GetMatches()
         {
