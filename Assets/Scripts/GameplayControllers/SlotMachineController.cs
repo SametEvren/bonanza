@@ -36,6 +36,7 @@ namespace GameplayControllers
 
         private int spinningSlotsCount = 0;
         private bool isSpinCompleteHandling = false;
+        private bool isSpinning = false;
 
         private void Start()
         {
@@ -44,6 +45,8 @@ namespace GameplayControllers
 
         public void TrySpinningTheSlot()
         {
+            if (isSpinning) return; 
+
             if (freeSpinController.TrySpinningForFree())
             {
                 StartCoroutine(SpinTheSlot());
@@ -60,6 +63,8 @@ namespace GameplayControllers
 
         private IEnumerator SpinTheSlot()
         {
+            isSpinning = true; 
+
             foreach (var reelController in reelControllers)
             {
                 SpinReelAround(reelController);
@@ -169,6 +174,7 @@ namespace GameplayControllers
             yield return new WaitForSeconds(1f);
             temporaryGoldPool.ApplyToPlayer();
             isSpinCompleteHandling = false;
+            isSpinning = false;
         }
 
         private IEnumerator DelayedRemove(List<SymbolType> symbolsToRemove)
@@ -184,6 +190,7 @@ namespace GameplayControllers
                 }
             }
             isSpinCompleteHandling = false;
+            isSpinning = false; 
         }
 
         private void HandleSpinFailed()
