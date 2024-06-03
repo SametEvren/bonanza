@@ -16,3 +16,9 @@ MonoBehaviour:
   sprite: {fileID: 21300000, guid: e9dca2ee36297d045b84ca7de66ac93e, type: 3}
   spawnWeight: 1
   minimumMatchCount: 1
+  multiplierAmounts:
+  - 2
+  - 3
+  - 5
+  - 10
+  - 50

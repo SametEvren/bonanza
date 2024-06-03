@@ -6,11 +6,13 @@ namespace SlotItem
     {
         public SlotItemType slotItemType;
         public SymbolData slotSymbolData;
+        public float multiplierAmount;
         
-        public SlotItemModel(SlotItemType slotItemType, SymbolData slotSymbolData)
+        public SlotItemModel(SlotItemType slotItemType, SymbolData slotSymbolData, float multiplierAmount)
         {
             this.slotItemType = slotItemType;
             this.slotSymbolData = slotSymbolData;
+            this.multiplierAmount = multiplierAmount;
         }
     }
 

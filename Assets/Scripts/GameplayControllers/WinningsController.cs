@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using SlotItem;
 using SymbolScriptables;
 using UnityEngine;
@@ -8,7 +9,7 @@ namespace GameplayControllers
 {
     public class WinningsController : MonoBehaviour
     {
-        [SerializeField] private PlayerData playerData;
+        [SerializeField] private TemporaryGoldPool temporaryGoldPool;
         [SerializeField] private SymbolLibrary symbolLibrary;
         [SerializeField] private BetController betController;
         [SerializeField] private UnityEngine.Rendering.SerializedDictionary<SymbolType, int> _slotItemsDictionary = new();
@@ -56,10 +57,10 @@ namespace GameplayControllers
             }
         }
 
-        public void EarnWinnings(List<(CommonSymbolData symbolData, int amount)> dataTuples)
+        public void EarnWinnings(List<(CommonSymbolData symbolData, int amount)> dataTuples, float multiplier)
         {
             double earningMultiplier = 0;
-        
+
             foreach (var tuple in dataTuples)
             {
                 var amount = (ulong)tuple.amount;
@@ -67,11 +68,15 @@ namespace GameplayControllers
                 earningMultiplier += (amount * payout);
             }
 
-            var earnings = (ulong)(earningMultiplier * betController.CurrentBetAmount);
-        
-            Debug.Log(earnings);
-            playerData.Gold += earnings;
+            var earnings = (ulong)Math.Round(earningMultiplier * betController.CurrentBetAmount);
+            temporaryGoldPool.Gold += earnings;
+
+            if (multiplier > 1)
+            {
+                temporaryGoldPool.multiplier += multiplier;
+            }
         }
+
 
         public Dictionary<SymbolType, int> GetMatches()
         {
