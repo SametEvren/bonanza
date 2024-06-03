@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Reel;
@@ -37,7 +38,9 @@ namespace GameplayControllers
         private int spinningSlotsCount = 0;
         private bool isSpinCompleteHandling = false;
         private bool isSpinning = false;
+        private bool isAutoSpinEnabled;
 
+        public Action<bool> AutoSpinChanged;
         private void Start()
         {
             StartCoroutine(SpinTheSlot());
@@ -166,6 +169,8 @@ namespace GameplayControllers
             else
             {
                 isSpinCompleteHandling = false;
+                if(isAutoSpinEnabled)
+                    TrySpinningTheSlot();
             }
         }
 
@@ -175,6 +180,9 @@ namespace GameplayControllers
             temporaryGoldPool.ApplyToPlayer();
             isSpinCompleteHandling = false;
             isSpinning = false;
+            
+            if(isAutoSpinEnabled)
+                TrySpinningTheSlot();
         }
 
         private IEnumerator DelayedRemove(List<SymbolType> symbolsToRemove)
@@ -196,6 +204,16 @@ namespace GameplayControllers
         private void HandleSpinFailed()
         {
             Debug.LogError("Spin failed due to insufficient funds or no free spins available.");
+        }
+
+        public void ToggleAutoSpin()
+        {
+            isAutoSpinEnabled = !isAutoSpinEnabled;
+            
+            if(isAutoSpinEnabled)
+                TrySpinningTheSlot();
+            
+            AutoSpinChanged?.Invoke(isAutoSpinEnabled);
         }
     }
 }

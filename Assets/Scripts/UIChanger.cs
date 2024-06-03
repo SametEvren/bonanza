@@ -1,16 +1,21 @@
 ﻿using GameplayControllers;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class UIChanger : MonoBehaviour
 {
     [SerializeField] private BetController betController;
-    public PlayerData playerData;
-    public TemporaryGoldPool temporaryGoldPool;
-    public TextMeshProUGUI goldText;
-    public TextMeshProUGUI freeSpinText;
-    public TextMeshProUGUI nonCollectedGoldText;
-    public TextMeshProUGUI betAmountText;
+    [SerializeField] private SlotMachineController slotMachineController;
+    [SerializeField] private PlayerData playerData;
+    [SerializeField] private TemporaryGoldPool temporaryGoldPool;
+    [SerializeField] private TextMeshProUGUI goldText;
+    [SerializeField] private TextMeshProUGUI freeSpinText;
+    [SerializeField] private TextMeshProUGUI nonCollectedGoldText;
+    [SerializeField] private TextMeshProUGUI betAmountText;
+    [SerializeField] private TextMeshProUGUI autoSpinButtonText;
+    [SerializeField] private GameObject spinButton;
+    
     
     private void Start()
     {
@@ -22,6 +27,7 @@ public class UIChanger : MonoBehaviour
         playerData.onFreeSpinChange += UpdateFreeSpinText;
         temporaryGoldPool.onTemporaryGoldChange += UpdateNonCollectedGoldText;
         betController.onBetChange += UpdateBetAmountText;
+        slotMachineController.AutoSpinChanged += ChangeSpinButtons;
     }
 
     private void UpdateBetAmountText(ulong betAmount)
@@ -42,5 +48,19 @@ public class UIChanger : MonoBehaviour
     private void UpdateNonCollectedGoldText(ulong newGold)
     {
         nonCollectedGoldText.text = newGold.ToString();
+    }
+    
+    private void ChangeSpinButtons(bool isAutoSpinEnabled)
+    {
+        if (isAutoSpinEnabled)
+        {
+            autoSpinButtonText.text = "Auto Spin Enabled";
+            spinButton.SetActive(false);
+        }
+        else
+        {
+            autoSpinButtonText.text = "Auto Spin Disabled";
+            spinButton.SetActive(true);
+        }
     }
 }

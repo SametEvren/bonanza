@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Spawn Chances
   m_EditorClassIdentifier: 
   typeChances:
-    commonChance: 0.909
-    scatterChance: 0.066
-    multiplierChance: 0.026
+    commonChance: 0.929
+    scatterChance: 0.029
+    multiplierChance: 0.043
