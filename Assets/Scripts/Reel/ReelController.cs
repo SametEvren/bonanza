@@ -64,6 +64,7 @@ namespace Reel
                 }
             }
 
+            
             foreach (var item in itemsToRemove)
             {
                 RemoveSlotItem(item);

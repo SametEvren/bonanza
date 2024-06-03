@@ -37,18 +37,19 @@ namespace GameplayControllers
 
         private int spinningSlotsCount = 0;
         private bool isSpinCompleteHandling = false;
-        private bool isSpinning = false;
+        public bool isSpinning = false;
         private bool isAutoSpinEnabled;
 
         public Action<bool> AutoSpinChanged;
         private void Start()
         {
-            StartCoroutine(SpinTheSlot());
+            TrySpinningTheSlot();
         }
 
         public void TrySpinningTheSlot()
         {
             if (isSpinning) return; 
+            isSpinning = true; 
 
             if (freeSpinController.TrySpinningForFree())
             {
@@ -60,14 +61,13 @@ namespace GameplayControllers
             }
             else
             {
+                isSpinning = false;
                 HandleSpinFailed();
             }
         }
 
         private IEnumerator SpinTheSlot()
         {
-            isSpinning = true; 
-
             foreach (var reelController in reelControllers)
             {
                 SpinReelAround(reelController);
@@ -92,11 +92,13 @@ namespace GameplayControllers
             {
                 var spawnedItem = spawnedItems[i];
                 spinningSlotsCount++;
+                Debug.Log("Spinning Slots Count After Plus: " + spinningSlotsCount);
                 var slotIndex = i;
 
                 spawnedItem.MoveDownSmoothly(ReelController.ReelSlotCapacity, () =>
                 {
                     spinningSlotsCount--;
+                    Debug.Log("Spinning Slots Count After Minus: " + spinningSlotsCount);
                     spawnedItem.slotIndexOnReel = slotIndex;
                     if (spinningSlotsCount == 0)
                         HandleSpinComplete();
@@ -108,6 +110,8 @@ namespace GameplayControllers
         {
             if (isSpinCompleteHandling) return;
 
+            bool startSpinningWithinHandling = false;
+            
             Debug.Log("Handle Spin Complete");
             isSpinCompleteHandling = true;
 
@@ -125,6 +129,8 @@ namespace GameplayControllers
                 var amountToSpawn = reelController.RemoveSymbolsOfType(symbolsToRemove);
                 if (amountToSpawn > 0)
                 {
+                    isSpinning = true;
+                    startSpinningWithinHandling = true;
                     SymbolSpawner.SpawnOnTop(reelController, amountToSpawn);
                     reelController.MoveItemsDown(amountToSpawn, HandleSpinComplete);
                 }
@@ -164,11 +170,13 @@ namespace GameplayControllers
 
             if (symbolsToRemove.Count == 0 || !containsNonMultiplierItems)
             {
+                isSpinning = startSpinningWithinHandling;
                 StartCoroutine(ApplyWithinDelay());
             }
             else
             {
                 isSpinCompleteHandling = false;
+                isSpinning = startSpinningWithinHandling;
                 if(isAutoSpinEnabled)
                     TrySpinningTheSlot();
             }
@@ -179,7 +187,6 @@ namespace GameplayControllers
             yield return new WaitForSeconds(1f);
             temporaryGoldPool.ApplyToPlayer();
             isSpinCompleteHandling = false;
-            isSpinning = false;
             
             if(isAutoSpinEnabled)
                 TrySpinningTheSlot();
@@ -193,12 +200,12 @@ namespace GameplayControllers
                 var amountToSpawn = reelController.RemoveSymbolsOfType(symbolsToRemove);
                 if (amountToSpawn > 0)
                 {
+                    isSpinning = true;
                     SymbolSpawner.SpawnOnTop(reelController, amountToSpawn);
                     reelController.MoveItemsDown(amountToSpawn, HandleSpinComplete);
                 }
             }
             isSpinCompleteHandling = false;
-            isSpinning = false; 
         }
 
         private void HandleSpinFailed()

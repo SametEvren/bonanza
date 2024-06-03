@@ -66,6 +66,7 @@ namespace GameplayControllers
                 var amount = (ulong)tuple.amount;
                 var payout = tuple.symbolData.payoutMultiplier;
                 earningMultiplier += (amount * payout);
+                Debug.Log(tuple.symbolData.symbolType + ":" + amount + "x" + payout);
             }
 
             var earnings = (ulong)Math.Round(earningMultiplier * betController.CurrentBetAmount);
@@ -75,6 +76,8 @@ namespace GameplayControllers
             {
                 temporaryGoldPool.multiplier += multiplier;
             }
+            
+            Debug.Log("Bet Amount: " + betController.CurrentBetAmount + "Temp Gold Increase = " + earnings + ",Temp Multi Increase = " + multiplier);
         }
 
 
