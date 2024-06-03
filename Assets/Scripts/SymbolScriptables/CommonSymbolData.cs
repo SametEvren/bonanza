@@ -5,6 +5,6 @@ namespace SymbolScriptables
     [CreateAssetMenu(fileName = "Common Symbol Data")]
     public class CommonSymbolData : SymbolData
     {
-        public ulong payoutValue;
+        public double payoutMultiplier;
     }
 }

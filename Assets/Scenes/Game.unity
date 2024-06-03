@@ -738,6 +738,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: a72d71c6fdfd4d64284e104a94d605ed, type: 2}
+  gainAmount: 10
 --- !u!1 &523968528
 GameObject:
   m_ObjectHideFlags: 0
@@ -857,7 +858,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   spawnChances: {fileID: 11400000, guid: b7b10fe2df9208a42b086c0cfb3a7852, type: 2}
   symbolLibrary: {fileID: 11400000, guid: fc7cf4e093069fc4bb7c8724a4b37a0f, type: 2}
-  freeSpinController: {fileID: 0}
+  freeSpinController: {fileID: 444239972}
 --- !u!4 &806790356
 Transform:
   m_ObjectHideFlags: 0

@@ -26,3 +26,6 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 676d4124b5a5b2a42a377482a643b6e4, type: 2}
   multiplierSymbolData:
   - {fileID: 11400000, guid: 15c7d107da33f394c99ec5aa452f8c12, type: 2}
+  commonMatchMinimum: 8
+  scatterMatchMinimum: 4
+  multiplierMatchMinimum: 1

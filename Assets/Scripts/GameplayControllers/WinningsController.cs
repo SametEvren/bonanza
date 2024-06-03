@@ -8,7 +8,6 @@ namespace GameplayControllers
 {
     public class WinningsController : MonoBehaviour
     {
-        private const ulong BaseBetAmount = 1_000_000;
         [SerializeField] private PlayerData playerData;
         [SerializeField] private SymbolLibrary symbolLibrary;
         [SerializeField] private BetController betController;
@@ -56,23 +55,19 @@ namespace GameplayControllers
                 }
             }
         }
-        private double GetBetMultiplier(ulong betAmount)
-        {
-            return betAmount / (double)BaseBetAmount;
-        }
 
         public void EarnWinnings(List<(CommonSymbolData symbolData, int amount)> dataTuples)
         {
-            ulong earnings = 0;
+            double earningMultiplier = 0;
         
             foreach (var tuple in dataTuples)
             {
                 var amount = (ulong)tuple.amount;
-                var payout = tuple.symbolData.payoutValue;
-                earnings += amount * payout;
+                var payout = tuple.symbolData.payoutMultiplier;
+                earningMultiplier += (amount * payout);
             }
 
-            earnings = (ulong)(earnings * GetBetMultiplier(betController.CurrentBetAmount));
+            var earnings = (ulong)(earningMultiplier * betController.CurrentBetAmount);
         
             Debug.Log(earnings);
             playerData.Gold += earnings;

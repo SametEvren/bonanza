@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c6f47025f124bceb5a44277dd9249aa, type: 3}
   m_Name: 5 - Parrot
   m_EditorClassIdentifier: 
-  symbolType: 0
+  symbolType: 5
   sprite: {fileID: 21300000, guid: 0c92562c882d3374cad89e705ae94d4e, type: 3}
   spawnWeight: 6
   minimumMatchCount: 8
-  payoutValue: 3500000
+  payoutMultiplier: 1.3
