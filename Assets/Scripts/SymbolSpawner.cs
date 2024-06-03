@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using GameplayControllers;
 using Reel;
 using SlotItem;
 using SymbolScriptables;
@@ -16,6 +17,7 @@ public class SymbolSpawner : MonoBehaviour
     
     [SerializeField] private SpawnChances spawnChances;
     [SerializeField] private SymbolLibrary symbolLibrary;
+    [SerializeField] private FreeSpinController freeSpinController;
 
     private void Awake()
     {
@@ -55,9 +57,14 @@ public class SymbolSpawner : MonoBehaviour
     private SlotItemModel GenerateSymbolData()
     {
         var slotType = spawnChances.EvaluateTypeValue(Random.Range(0f, 1f));
+        
+        if (slotType == SlotItemType.Multiplier)
+        {
+            slotType = freeSpinController.IsFreeSpinActive ? SlotItemType.Multiplier : SlotItemType.Common;
+        }
+        
         var symbolData = GetRandomSymbolData(slotType);
         var slotModel = new SlotItemModel(slotType, symbolData);
         return slotModel;
     }
-    
 }

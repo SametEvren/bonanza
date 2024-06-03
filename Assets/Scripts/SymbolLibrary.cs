@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System;
+using System.Collections.Generic;
 using SlotItem;
 using SymbolScriptables;
 using UnityEngine;
@@ -10,9 +10,52 @@ public class SymbolLibrary : ScriptableObject
     public List<CommonSymbolData> commonSymbolData;
     public List<ScatterSymbolData> scatterSymbolData;
     public List<MultiplierSymbolData> multiplierSymbolData;
+
+    public int commonMatchMinimum;
+    public int scatterMatchMinimum;
+    public int multiplierMatchMinimum;
+    
     private float _commonSymbolWeightTotal = -1;
     private float _scatterSymbolWeightTotal = -1;
     private float _multiplierSymbolWeightTotal = -1;
+
+    public SlotItemType GetType(SymbolType symbolType)
+    {
+        foreach (var commonSymbol in commonSymbolData)
+        {
+            if (commonSymbol.symbolType == symbolType)
+                return SlotItemType.Common;
+        }
+        
+        foreach (var scatterSymbol in scatterSymbolData)
+        {
+            if (scatterSymbol.symbolType == symbolType)
+                return SlotItemType.Scatter;
+        }
+        
+        foreach (var multiplierSymbol in multiplierSymbolData)
+        {
+            if (multiplierSymbol.symbolType == symbolType)
+                return SlotItemType.Multiplier;
+        }
+
+        return SlotItemType.Common;;
+    }
+
+    public int GetMinimumMatchForType(SlotItemType slotItemType)
+    {
+        switch (slotItemType)
+        {
+            case SlotItemType.Common:
+                return commonMatchMinimum;
+            case SlotItemType.Scatter:
+                return scatterMatchMinimum;
+            case SlotItemType.Multiplier:
+                return multiplierMatchMinimum;
+        }
+
+        return commonMatchMinimum;
+    }
 
     public List<CommonSymbolData> PickCommonData(List<SymbolType> symbolTypes)
     {

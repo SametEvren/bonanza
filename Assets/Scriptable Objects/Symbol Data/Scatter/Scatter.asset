@@ -15,3 +15,4 @@ MonoBehaviour:
   symbolType: 10
   sprite: {fileID: 21300000, guid: 6765563d5f42ced42a3311e8b98a6ad8, type: 3}
   spawnWeight: 1
+  minimumMatchCount: 4

@@ -12,6 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3906058da8594fd28a41f9cea2dd1d34, type: 3}
   m_Name: Player Data
   m_EditorClassIdentifier: 
-  gold: 104757814
+  gold: 100757814
+  freeSpinAmount: 0
   experience: 0
   level: 0

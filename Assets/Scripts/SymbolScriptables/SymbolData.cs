@@ -8,5 +8,6 @@ namespace SymbolScriptables
         public SymbolType symbolType;
         public Sprite sprite;
         public float spawnWeight;
+        public int minimumMatchCount;
     }
 }

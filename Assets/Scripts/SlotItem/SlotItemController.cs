@@ -1,4 +1,5 @@
 ﻿using System;
+using GameplayControllers;
 using PrimeTween;
 using SymbolScriptables;
 using UnityEngine;
@@ -23,7 +24,7 @@ namespace SlotItem
         
         private IObjectPoolManager<SlotItemController> ObjectPoolManager => 
             ServiceLocator.Get<IObjectPoolManager<SlotItemController>>();
-        private WinningsCalculator WinningsCalculator => ServiceLocator.Get<WinningsCalculator>();
+        private WinningsController WinningsController => ServiceLocator.Get<WinningsController>();
 
         private Tween _moveDownTween;
         private void Awake()
@@ -41,7 +42,7 @@ namespace SlotItem
         {
             _moveDownTween.Stop();
             
-            WinningsCalculator.RemoveFromItemCount(SymbolType);
+            WinningsController.RemoveFromItemCount(SymbolType);
             ObjectPoolManager.ReleaseItemToPool(this);
         }
 

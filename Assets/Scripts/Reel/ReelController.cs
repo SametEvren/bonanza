@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using SlotItem;
 using UnityEngine;
 
-
 namespace Reel
 {
     public class ReelController : MonoBehaviour
