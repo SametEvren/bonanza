@@ -25,8 +25,11 @@ namespace SlotItem
         private IObjectPoolManager<SlotItemController> ObjectPoolManager => 
             ServiceLocator.Get<IObjectPoolManager<SlotItemController>>();
         private WinningsController WinningsController => ServiceLocator.Get<WinningsController>();
+        private SymbolSpawner SymbolSpawner => ServiceLocator.Get<SymbolSpawner>();
 
         private Tween _moveDownTween;
+
+        
         private void Awake()
         {
             _slotItemView = GetComponent<SlotItemView>();
@@ -53,12 +56,20 @@ namespace SlotItem
             var unitHeight = rectTransform.sizeDelta.y;
             var changeAmount = unitHeight * amountOfSlots;
             var newPosition = new Vector2(anchoredPosition.x, anchoredPosition.y - changeAmount);
+            _moveDownTween.Stop();
             _moveDownTween = Tween.UIAnchoredPosition(rectTransform, newPosition, 1f).OnComplete(onComplete);
         }
 
         public void ResetSlotItem()
         {
             slotIndexOnReel = -1;
+        }
+
+        public void PickMultiplierAmount()
+        {
+            var multiplierSymbolData = SymbolSpawner.multiplierSymbolData;
+            _slotItemModel.multiplierAmount = multiplierSymbolData.PickRandom();
+            _slotItemView.Render(_slotItemModel);
         }
     }
 }

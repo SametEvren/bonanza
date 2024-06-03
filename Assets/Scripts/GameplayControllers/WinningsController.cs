@@ -8,7 +8,7 @@ namespace GameplayControllers
 {
     public class WinningsController : MonoBehaviour
     {
-        [SerializeField] private PlayerData playerData;
+        [SerializeField] private TemporaryGoldPool temporaryGoldPool;
         [SerializeField] private SymbolLibrary symbolLibrary;
         [SerializeField] private BetController betController;
         [SerializeField] private UnityEngine.Rendering.SerializedDictionary<SymbolType, int> _slotItemsDictionary = new();
@@ -56,7 +56,7 @@ namespace GameplayControllers
             }
         }
 
-        public void EarnWinnings(List<(CommonSymbolData symbolData, int amount)> dataTuples)
+        public void EarnWinnings(List<(CommonSymbolData symbolData, int amount)> dataTuples, float multiplier)
         {
             double earningMultiplier = 0;
         
@@ -68,9 +68,13 @@ namespace GameplayControllers
             }
 
             var earnings = (ulong)(earningMultiplier * betController.CurrentBetAmount);
-        
-            Debug.Log(earnings);
-            playerData.Gold += earnings;
+            temporaryGoldPool.gold += earnings;
+
+            if (multiplier > 1)
+            {
+                temporaryGoldPool.multiplier += multiplier;
+            }
+            
         }
 
         public Dictionary<SymbolType, int> GetMatches()

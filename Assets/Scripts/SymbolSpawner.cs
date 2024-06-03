@@ -19,6 +19,7 @@ public class SymbolSpawner : MonoBehaviour
     [SerializeField] private SymbolLibrary symbolLibrary;
     [SerializeField] private FreeSpinController freeSpinController;
 
+    public MultiplierSymbolData multiplierSymbolData;
     private void Awake()
     {
         ServiceLocator.Add(this);
@@ -64,7 +65,7 @@ public class SymbolSpawner : MonoBehaviour
         }
         
         var symbolData = GetRandomSymbolData(slotType);
-        var slotModel = new SlotItemModel(slotType, symbolData);
+        var slotModel = new SlotItemModel(slotType, symbolData,1);
         return slotModel;
     }
 }

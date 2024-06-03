@@ -5,19 +5,33 @@ using Reel;
 using SlotItem;
 using SymbolScriptables;
 using UnityEngine;
-using UnityEngine.Serialization;
 using Utility;
 
 namespace GameplayControllers
 {
     public class SlotMachineController : MonoBehaviour
     {
+        public List<SlotItemController> AllItemControllers
+        {
+            get
+            {
+                var controllers = new List<SlotItemController>();
+                foreach (var reelController in reelControllers)
+                {
+                    controllers.AddRange(reelController.slotItemControllers);
+                }
+
+                return controllers;
+            }
+        }
+        
         [SerializeField] private SymbolLibrary symbolLibrary;
         [SerializeField] private List<ReelController> reelControllers;
-        [FormerlySerializedAs("winningsCalculator")] [SerializeField] private WinningsController winningsController;
+        [SerializeField] private WinningsController winningsController;
         [SerializeField] private BetController betController;
         [SerializeField] private FreeSpinController freeSpinController;
-    
+        [SerializeField] private TemporaryGoldPool temporaryGoldPool;
+        
         private SymbolSpawner SymbolSpawner => ServiceLocator.Get<SymbolSpawner>();
 
         private int _spinningSlots = 0;
@@ -90,8 +104,14 @@ namespace GameplayControllers
             var matches = winningsController.GetMatches();
             var symbolsToRemove = matches.Keys.ToList();
 
+            var multiplierSymbols = new List<SlotItemController>();
+
+            var containsNonMultiplierItems = symbolsToRemove.Any(s => s != SymbolType.Multiplier);
+            
             foreach (var reelController in reelControllers)
             {
+                symbolsToRemove.Remove(SymbolType.Multiplier);
+                
                 var amountToSpawn = reelController.RemoveSymbolsOfType(symbolsToRemove);
                 if (amountToSpawn > 0)
                 {            
@@ -100,13 +120,29 @@ namespace GameplayControllers
                 }
             }
 
-            var commonSymbols = symbolLibrary.PickCommonData(symbolsToRemove);
+            var finalMultiplier = 0f;
 
+            //If we only have multiplier.
+            if (!containsNonMultiplierItems)
+            {
+                multiplierSymbols.AddRange(AllItemControllers.Where(s => s.SymbolType == SymbolType.Multiplier));
+                foreach (var multiplierSymbol in multiplierSymbols)
+                {
+                    multiplierSymbol.PickMultiplierAmount();
+                    finalMultiplier += multiplierSymbol.Model.multiplierAmount;
+                }
+                
+                Debug.Log("Final Multiplier: " + finalMultiplier);
+
+                StartCoroutine(DelayedRemove(symbolsToRemove));
+            }
+            
+            var commonSymbols = symbolLibrary.PickCommonData(symbolsToRemove);
+            
             if (symbolsToRemove.Contains(SymbolType.Scatter))
             {
                 freeSpinController.TriggerFreeSpinGain();
             }
-            
             
             var tuples = new List<(CommonSymbolData symbolData, int amount)>();
 
@@ -114,8 +150,27 @@ namespace GameplayControllers
             {
                 tuples.Add((commonSymbol,matches[commonSymbol.symbolType]));
             }
-        
-            winningsController.EarnWinnings(tuples);
+
+            winningsController.EarnWinnings(tuples, finalMultiplier);
+            
+            if (symbolsToRemove.Count == 0 || !containsNonMultiplierItems)
+            {
+                temporaryGoldPool.ApplyToPlayer();
+            }
+        }
+
+        private IEnumerator DelayedRemove(List<SymbolType> symbolsToRemove)
+        {
+            yield return new WaitForSeconds(0.75f);
+            foreach (var reelController in reelControllers)
+            {
+                var amountToSpawn = reelController.RemoveSymbolsOfType(symbolsToRemove);
+                if (amountToSpawn > 0)
+                {
+                    SymbolSpawner.SpawnOnTop(reelController, amountToSpawn);
+                    reelController.MoveItemsDown(amountToSpawn, HandleSpinComplete);
+                }
+            }
         }
 
 
