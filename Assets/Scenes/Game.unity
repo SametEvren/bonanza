@@ -153,8 +153,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   playerData: {fileID: 11400000, guid: a72d71c6fdfd4d64284e104a94d605ed, type: 2}
+  temporaryGoldPool: {fileID: 11400000, guid: c2811b41110e4b344bca9c563cb98a04, type: 2}
   goldText: {fileID: 281850988}
   freeSpinText: {fileID: 441017415}
+  nonCollectedGoldText: {fileID: 1122128837}
 --- !u!4 &116719625
 Transform:
   m_ObjectHideFlags: 0

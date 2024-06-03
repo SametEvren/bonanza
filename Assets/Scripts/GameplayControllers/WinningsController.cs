@@ -68,7 +68,7 @@ namespace GameplayControllers
             }
 
             var earnings = (ulong)(earningMultiplier * betController.CurrentBetAmount);
-            temporaryGoldPool.gold += earnings;
+            temporaryGoldPool.Gold += earnings;
 
             if (multiplier > 1)
             {
