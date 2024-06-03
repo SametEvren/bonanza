@@ -10,6 +10,7 @@ namespace Reel
         public List<SlotItemController> slotItemControllers;
         public const int ReelSlotCapacity = 5;
         private int _movingItems;
+
         public void MoveItemsDown(int removeAmount, Action onComplete)
         {
             var slotItemControllersCopy = new List<SlotItemController>(slotItemControllers);
@@ -24,8 +25,13 @@ namespace Reel
                     var filledAmount = ReelSlotCapacity - removeAmount;
                     slotIndex = ReelSlotCapacity + i - filledAmount;
                 }
-                
-                var targetIndex = i;
+
+                var targetIndex = Mathf.Clamp(i, 0, ReelSlotCapacity - 1);
+
+                if (slotIndex < 0)
+                {
+                    slotIndex = targetIndex;
+                }
 
                 var amountToMoveDown = slotIndex - targetIndex;
 
@@ -71,6 +77,5 @@ namespace Reel
             slotItemControllers.Remove(slotItemController);
             slotItemController.DisableSlot();
         }
-
     }
 }
